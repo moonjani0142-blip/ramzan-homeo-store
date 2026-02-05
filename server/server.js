@@ -5,6 +5,11 @@ import helmet from 'helmet'
 import compression from 'compression'
 import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // Import routes
 import authRoutes from './routes/auth.js'
@@ -36,16 +41,20 @@ const limiter = rateLimit({
 app.use('/api/', limiter)
 
 // Database connection
+let isDbConnected = false
 const connectDB = async () => {
+  if (!process.env.MONGODB_URI) {
+    console.warn('⚠️ MONGODB_URI not set - database features will not work')
+    console.warn('⚠️ Please set MONGODB_URI environment variable to enable database functionality')
+    return
+  }
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ramzan-homeo', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    await mongoose.connect(process.env.MONGODB_URI)
+    isDbConnected = true
     console.log('✅ MongoDB Connected Successfully')
   } catch (error) {
     console.error('❌ MongoDB Connection Error:', error.message)
-    process.exit(1)
+    console.warn('⚠️ App running without database connection')
   }
 }
 
@@ -70,10 +79,19 @@ app.get('/api/health', (req, res) => {
   })
 })
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' })
-})
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/dist')))
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'))
+  })
+} else {
+  // 404 handler for development
+  app.use((req, res) => {
+    res.status(404).json({ message: 'Route not found' })
+  })
+}
 
 // Error handler
 app.use((err, req, res, next) => {
@@ -84,7 +102,8 @@ app.use((err, req, res, next) => {
   })
 })
 
-app.listen(PORT, () => {
+const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost'
+app.listen(PORT, host, () => {
   console.log(`🚀 Server running on port ${PORT}`)
   console.log(`📱 Environment: ${process.env.NODE_ENV || 'development'}`)
 })

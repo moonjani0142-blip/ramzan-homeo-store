@@ -1,0 +1,103 @@
+run = "npm run dev"
+entrypoint = "server/server.js"
+
+[packager]
+language = "nodejs"
+
+[nix]
+channel = "stable-22_11"
+
+[deployment]
+run = ["npm", "run", "dev"]
+deploymentTarget = "cloudrun"
+```
+
+### Step 6: Install & Run
+
+1. Click **"Run"** button
+2. Replit will automatically run `npm run install-all`
+3. Wait 2-3 minutes for installation
+4. Application starts!
+5. You'll see the URL: `https://your-app.username.repl.co`
+
+### Step 7: Complete the App Using Replit Agent
+
+1. **Open Replit AI** (click AI icon in sidebar)
+2. **Send this prompt**:
+```
+Please complete this medicine supply management application. 
+
+1. Create all missing pages marked with ⚠️ in STRUCTURE.md file
+2. Follow the exact design patterns from:
+   - pages/auth/Login.jsx (for styling)
+   - pages/admin/Dashboard.jsx (for page structure)
+   - layouts/AdminLayout.jsx (for navigation)
+   - index.css (for design system)
+
+3. Create these admin pages:
+   - UserManagement.jsx (create/manage medical stores)
+   - Inventory.jsx (stock management with low stock alerts)
+   - Orders.jsx (create orders, select store, add products)
+   - Invoices.jsx (generate PDF invoices with company branding)
+   - Stores.jsx (view all stores, their balances, invoices)
+   - Products.jsx (add products by company, batch no, rate in Rs.)
+   - PotencyRange.jsx (import from Excel, add potencies)
+   - CashFlow.jsx (revenue charts, outstanding balances)
+   - AdminManagement.jsx (main admin only - manage 3 sub-admins)
+
+4. Create these user pages:
+   - UserDashboard.jsx (user's orders, balance)
+   - BrowseProducts.jsx (browse medicines by company)
+   - Cart.jsx (shopping cart)
+   - UserOrders.jsx (order history)
+   - Profile.jsx (update store details)
+
+5. Create UserLayout.jsx similar to AdminLayout.jsx
+
+6. Create all backend routes in server/routes/:
+   - auth.js (login, register, JWT)
+   - dashboard.js (stats, search medicine)
+   - products.js (CRUD operations)
+   - orders.js (create, update, list)
+   - invoices.js (generate PDF, save to folder)
+   - stores.js (manage medical stores)
+   - potencies.js (import Excel, CRUD)
+   - admin.js (manage sub-admins, activity logs)
+
+7. Create all database models in server/models/:
+   - User.js (stores + admins with roles)
+   - Product.js (medicines with company, potency, rate in Rs.)
+   - Order.js (orders with products array)
+   - Invoice.js (invoices with running balance, payments)
+   - Potency.js (potency values)
+   - Payment.js (payment tracking)
+   - ActivityLog.js (admin actions)
+
+8. Create middleware:
+   - auth.js (JWT verification)
+   - roleCheck.js (main_admin, sub_admin, admin, user)
+
+9. Create utilities:
+   - generatePDF.js (create invoice PDFs with company branding)
+   - excelImport.js (import potencies from Excel)
+   - fileManager.js (create store folders, save PDFs as InvoiceNumber_StoreName.pdf)
+
+10. Important features:
+    - All prices in Pakistani Rupees (Rs.)
+    - Invoice folder: /invoices/{StoreName}/
+    - Invoice filename: {InvoiceNumber}_{StoreName}.pdf
+    - Running balance system (previous balance + current)
+    - Payment added manually after delivery
+    - Credit system for overpayments
+    - Main admin can manage 3 sub-admins
+    - Admin name shown when logged in
+    - Search medicine feature on dashboard
+
+Please maintain the beautiful design system with:
+- Teal gradient colors (#17a2b8)
+- card-modern, btn-primary, input-modern classes
+- Smooth animations
+- Mobile responsive
+- Professional UI
+
+Start creating the files now.
