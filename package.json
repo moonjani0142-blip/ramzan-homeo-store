@@ -1,0 +1,20 @@
+{
+  "name": "ramzan-homeo-store-clinic",
+  "version": "1.0.0",
+  "description": "Medicine Supply Management System for Ramzan Homeo. Store & Clinic",
+  "main": "server/server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && nodemon server.js",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install"
+  },
+  "keywords": ["medicine", "supply", "management", "homeopathy"],
+  "author": "Ramzan Homeo. Store & Clinic",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2"
+  }
+}
